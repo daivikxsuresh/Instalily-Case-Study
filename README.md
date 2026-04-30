@@ -1,6 +1,8 @@
-# InstaLILY · AI Case Study
+# Instalily Case Study
 
 A 7-slide executive deck designed for InstaLILY's Analyst & Systems Architecture case study round.
+
+**Live deck:** https://daivikxsuresh.github.io/Instalily-Case-Study/
 
 **Companies analyzed:** 3M (industrial manufacturer) · Sysco (foodservice distributor)
 
