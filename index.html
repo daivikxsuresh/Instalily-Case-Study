@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InstaLILY · 3M & Sysco · AI Agent Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Onest:wght@300..900&family=JetBrains+Mono:wght@300..700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --ink-2: #141414;
+    --ink-3: #1c1c1c;
+    --paper: #f5f1e8;
+    --paper-2: #ddd6c5;
+    --rule: #2a2a2a;
+    --rule-2: #3a3a3a;
+    --muted: #7a7670;
+    --muted-2: #a09a90;
+    --accent: #ff5722;
+    --accent-2: #ff8a4c;
+    --accent-soft: rgba(255, 87, 34, 0.12);
+    --danger: #ef4444;
+    --danger-soft: rgba(239, 68, 68, 0.1);
+    --success: #84cc16;
+    --info: #60a5fa;
+    --warn: #f59e0b;
+
+    --display: 'Fraunces', Georgia, serif;
+    --body: 'Onest', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: var(--ink); color: var(--paper); font-family: var(--body); overflow-x: hidden; }
+  body {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100vh;
+  }
+
+  /* Grain texture overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E");
+  }
+
+  .slide {
+    width: 100vw;
+    height: 100vh;
+    min-height: 600px;
+    scroll-snap-align: start;
+    position: relative;
+    padding: 56px 80px 64px;
+    display: grid;
+    overflow: hidden;
+  }
+
+  /* Universal slide chrome */
+  .chrome-top {
+    position: absolute;
+    top: 36px;
+    left: 80px;
+    right: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    z-index: 5;
+  }
+  .chrome-bottom {
+    position: absolute;
+    bottom: 32px;
+    left: 80px;
+    right: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    z-index: 5;
+  }
+  .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--paper);
+    font-weight: 500;
+  }
+  .brand-mark .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+  }
+  .slide-num {
+    color: var(--paper);
+    font-weight: 500;
+  }
+  .slide-num span { color: var(--muted); }
+
+  /* SLIDE 1 — TITLE */
+  .slide-title {
+    grid-template-columns: 1fr;
+    align-content: center;
+    background: radial-gradient(ellipse at 80% 30%, rgba(255, 87, 34, 0.08), transparent 60%);
+  }
+  .slide-title .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+  .slide-title .pill::before {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .slide-title h1 {
+    font-family: var(--display);
+    font-size: clamp(72px, 8vw, 132px);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 24px;
+    font-variation-settings: "opsz" 144;
+  }
+  .slide-title h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+  }
+  .slide-title .deck {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--paper-2);
+    max-width: 720px;
+    line-height: 1.4;
+    margin-bottom: 56px;
+    font-style: italic;
+  }
+  .meta-row {
+    display: flex;
+    gap: 64px;
+    border-top: 1px solid var(--rule);
+    padding-top: 24px;
+    max-width: 800px;
+  }
+  .meta-row > div { display: flex; flex-direction: column; gap: 6px; }
+  .meta-row .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+  }
+  .meta-row .value {
+    font-family: var(--body);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--paper);
+  }
+  .deco-line {
+    position: absolute;
+    bottom: 80px;
+    right: 80px;
+    width: 280px;
+    height: 280px;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+  .deco-line::after {
+    content: "";
+    position: absolute;
+    inset: 40px;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+  }
+  .deco-line::before {
+    content: "01 / 07";
+    position: absolute;
+    bottom: -6px;
+    right: -20px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    background: var(--ink);
+    padding: 4px 10px;
+  }
+
+  /* WORKFLOW SLIDE LAYOUT */
+  .slide-workflow {
+    grid-template-rows: auto 1fr auto;
+    gap: 24px;
+  }
+  .slide-header {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 32px;
+    align-items: end;
+    margin-top: 32px;
+  }
+  .big-num {
+    font-family: var(--display);
+    font-size: 96px;
+    font-weight: 300;
+    line-height: 0.85;
+    color: var(--accent);
+    font-style: italic;
+  }
+  .header-text h2 {
+    font-family: var(--display);
+    font-size: 48px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .header-text .sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+  .header-text .sub span { color: var(--accent); }
+
+  /* WORKFLOW DIAGRAM */
+  .workflow {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0;
+    align-items: stretch;
+    margin: 16px 0;
+    position: relative;
+  }
+  .step {
+    background: var(--ink-2);
+    border: 1px solid var(--rule);
+    border-right: none;
+    padding: 24px 22px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 200px;
+  }
+  .step:last-child { border-right: 1px solid var(--rule); }
+  .step::after {
+    content: "";
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 18px;
+    height: 18px;
+    background: var(--ink-2);
+    border-right: 1px solid var(--rule);
+    border-top: 1px solid var(--rule);
+    z-index: 2;
+  }
+  .step:last-child::after { display: none; }
+  .step .num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+  }
+  .step .title {
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .step .desc {
+    font-size: 12px;
+    color: var(--muted-2);
+    line-height: 1.5;
+    margin-top: auto;
+  }
+  .step.friction { background: linear-gradient(180deg, var(--ink-2), rgba(239, 68, 68, 0.08)); }
+  .step.friction .badge {
+    position: absolute;
+    top: -10px;
+    left: 22px;
+    background: var(--danger);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+
+  /* IMPACT BAR */
+  .impact-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .impact-cell {
+    background: var(--ink-2);
+    padding: 22px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .impact-cell .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+  .impact-cell .value {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--paper);
+    line-height: 1.1;
+  }
+  .impact-cell .value em { color: var(--accent); font-style: italic; font-weight: 400; }
+  .impact-cell.lead {
+    background: var(--ink-3);
+    justify-content: space-between;
+  }
+  .impact-cell.lead .label { color: var(--accent); }
+  .impact-cell.lead .value { font-size: 18px; line-height: 1.4; }
+
+  /* AGENT SLIDE */
+  .slide-agents {
+    grid-template-rows: auto 1fr;
+    gap: 32px;
+  }
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: stretch;
+  }
+  .agent {
+    background: var(--ink-2);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    padding: 28px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+  }
+  .agent:nth-child(2) { border-top-color: var(--accent-2); }
+  .agent:nth-child(3) { border-top-color: var(--info); }
+  .agent .agent-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .agent .agent-name {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .agent .row {
+    display: grid;
+    grid-template-columns: 84px 1fr;
+    gap: 14px;
+    padding: 10px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .agent .row:first-of-type { border-top: 1px solid var(--rule-2); margin-top: 6px; }
+  .agent .row .key {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    padding-top: 2px;
+  }
+  .agent .row .val {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--paper);
+  }
+  .agent .hitl {
+    margin-top: auto;
+    padding: 10px 12px;
+    background: var(--ink-3);
+    border-left: 2px solid var(--success);
+    font-size: 11px;
+    color: var(--paper-2);
+    line-height: 1.4;
+  }
+  .agent .hitl strong {
+    display: block;
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--success);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  /* WEDGE SLIDE */
+  .slide-wedge {
+    grid-template-rows: auto 1fr;
+    gap: 32px;
+  }
+  .wedge-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+  }
+  .matrix {
+    background: var(--ink-2);
+    border: 1px solid var(--rule);
+    overflow: hidden;
+  }
+  .matrix table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .matrix th, .matrix td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--rule);
+    font-size: 12px;
+  }
+  .matrix th {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    font-weight: 500;
+    background: var(--ink-3);
+  }
+  .matrix td:first-child {
+    font-weight: 500;
+    color: var(--paper);
+  }
+  .matrix tr.winner {
+    background: rgba(255, 87, 34, 0.08);
+    position: relative;
+  }
+  .matrix tr.winner td:first-child::before {
+    content: "▸";
+    color: var(--accent);
+    margin-right: 8px;
+  }
+  .matrix tr.winner td { color: var(--paper); font-weight: 500; }
+  .stars { font-family: var(--mono); letter-spacing: 0.05em; color: var(--accent); font-size: 13px; }
+  .stars-d { color: var(--muted); }
+
+  .wedge-decision {
+    background: var(--ink-2);
+    border: 1px solid var(--rule);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+  }
+  .wedge-decision::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  }
+  .wedge-decision .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+  }
+  .wedge-decision .pick {
+    font-family: var(--display);
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .wedge-decision .pick em { font-style: italic; color: var(--accent); }
+  .wedge-decision .why {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--paper-2);
+  }
+  .wedge-kpis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    margin-top: auto;
+  }
+  .wedge-kpis > div {
+    background: var(--ink-3);
+    padding: 16px 18px;
+  }
+  .wedge-kpis .key {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .wedge-kpis .val {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--paper);
+    line-height: 1.2;
+  }
+  .wedge-kpis .val em { color: var(--accent); font-style: italic; }
+
+  /* PILOT SLIDE */
+  .slide-pilot {
+    grid-template-rows: auto 1fr;
+    gap: 32px;
+  }
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    align-items: stretch;
+  }
+  .phase {
+    background: var(--ink-2);
+    border: 1px solid var(--rule);
+    border-right: none;
+    padding: 28px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+  }
+  .phase:last-child { border-right: 1px solid var(--rule); }
+  .phase-bar {
+    position: relative;
+    height: 4px;
+    background: var(--rule);
+    margin-bottom: 6px;
+  }
+  .phase-bar::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0;
+    height: 100%;
+    width: var(--fill, 33%);
+    background: var(--accent);
+  }
+  .phase:nth-child(2) .phase-bar::before { background: var(--accent-2); width: 66%; }
+  .phase:nth-child(3) .phase-bar::before { background: var(--info); width: 100%; }
+  .phase-days {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+  .phase:nth-child(2) .phase-days { color: var(--accent-2); }
+  .phase:nth-child(3) .phase-days { color: var(--info); }
+  .phase-title {
+    font-family: var(--display);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .phase-title em { font-style: italic; color: var(--accent); }
+  .phase-block {
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
+  }
+  .phase-block .key {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .phase-block ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .phase-block li {
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--paper);
+    padding-left: 14px;
+    position: relative;
+  }
+  .phase-block li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+  .phase-block li.out { color: var(--muted); text-decoration: line-through; }
+  .phase-block li.out::before { color: var(--danger); content: "×"; }
+
+  .risk-bar {
+    display: grid;
+    grid-template-columns: auto repeat(3, 1fr) auto;
+    gap: 0;
+    background: var(--ink-3);
+    border: 1px solid var(--rule);
+    margin-top: 16px;
+  }
+  .risk-bar > div {
+    padding: 16px 20px;
+    border-right: 1px solid var(--rule);
+  }
+  .risk-bar > div:last-child { border-right: none; background: var(--accent); color: var(--ink); }
+  .risk-bar > div:first-child {
+    display: flex;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+  }
+  .risk-bar .risk-name {
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--paper);
+    margin-bottom: 4px;
+  }
+  .risk-bar .risk-mit {
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--muted-2);
+  }
+  .risk-bar > div:last-child {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 500;
+  }
+  .risk-bar > div:last-child small {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-style: normal;
+    margin-bottom: 4px;
+    opacity: 0.7;
+  }
+
+  /* NAVIGATION */
+  .nav {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 50;
+    padding: 8px 12px;
+    background: rgba(20, 20, 20, 0.85);
+    border: 1px solid var(--rule);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+  }
+  .nav button {
+    background: transparent;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+  }
+  .nav button:hover { color: var(--paper); }
+  .nav button.active { background: var(--accent); color: var(--ink); }
+  .nav .arrow { color: var(--muted); padding: 0 4px; }
+  .nav .arrow:hover { color: var(--accent); }
+
+  .keyhint {
+    position: fixed;
+    bottom: 30px;
+    right: 80px;
+    z-index: 50;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    opacity: 0.7;
+  }
+  .keyhint kbd {
+    background: var(--ink-2);
+    border: 1px solid var(--rule);
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin: 0 2px;
+    color: var(--paper-2);
+  }
+
+  /* Sysco specific accent variation */
+  .slide-sysco .big-num { color: var(--accent-2); }
+  .slide-sysco .step .num { color: var(--accent-2); }
+  .slide-sysco .step.friction { background: linear-gradient(180deg, var(--ink-2), rgba(239, 68, 68, 0.08)); }
+  .slide-sysco .impact-cell .value em { color: var(--accent-2); }
+  .slide-sysco .impact-cell.lead .label { color: var(--accent-2); }
+  .slide-sysco-agents .agent { border-top-color: var(--accent-2); }
+  .slide-sysco-agents .agent:nth-child(2) { border-top-color: var(--accent); }
+  .slide-sysco-agents .agent:nth-child(3) { border-top-color: var(--info); }
+  .slide-sysco-agents .agent .row .key { color: var(--accent-2); }
+
+  /* PRINT */
+  @media print {
+    body { scroll-snap-type: none; height: auto; overflow: visible; }
+    .slide { page-break-after: always; height: 100vh; }
+    .nav, .keyhint, body::before { display: none; }
+  }
+
+  @media (max-width: 1100px) {
+    .slide { padding: 40px 48px 56px; }
+    .chrome-top, .chrome-bottom { left: 48px; right: 48px; }
+    .workflow { grid-template-columns: repeat(3, 1fr); }
+    .step { border-right: 1px solid var(--rule); border-bottom: none; }
+    .step::after { display: none; }
+    .agents-grid { grid-template-columns: 1fr; }
+    .timeline { grid-template-columns: 1fr; }
+    .phase { border-right: 1px solid var(--rule); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== SLIDE 1: TITLE ========== -->
+<section class="slide slide-title" id="s1">
+  <div class="chrome-top">
+    <div class="brand-mark"><span class="dot"></span> InstaLILY · Case Study</div>
+    <div>April 2026</div>
+  </div>
+
+  <div>
+    <div class="pill">Analyst &amp; Systems Architecture</div>
+    <h1>Turning complex<br>work into <em>revenue.</em></h1>
+    <div class="deck">A coordinated agent architecture for 3M and Sysco — designed to land a paid pilot inside 90 days, without touching the ERP.</div>
+
+    <div class="meta-row">
+      <div>
+        <span class="label">Prepared by</span>
+        <span class="value">Daivik Suresh</span>
+      </div>
+      <div>
+        <span class="label">For</span>
+        <span class="value">InstaLILY · Founders</span>
+      </div>
+      <div>
+        <span class="label">Companies</span>
+        <span class="value">3M · Sysco</span>
+      </div>
+      <div>
+        <span class="label">Format</span>
+        <span class="value">7 Slides · Executive Read</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="deco-line"></div>
+
+  <div class="chrome-bottom">
+    <div>Don't slow down. Sell faster.</div>
+    <div class="slide-num"><span>Slide</span> 01 / 07</div>
+  </div>
+</section>
+
+<!-- ========== SLIDE 2: 3M CURRENT STATE ========== -->
+<section class="slide slide-workflow" id="s2">
+  <div class="chrome-top">
+    <div class="brand-mark"><span class="dot"></span> 3M · Industrial Manufacturer</div>
+    <div>Current State Workflow</div>
+  </div>
+
+  <div class="slide-header">
+    <div class="big-num">01</div>
+    <div class="header-text">
+      <h2>The Pricing Bottleneck</h2>
+      <div class="sub">Distributor Pricing Approval <span>→</span> Margin Realization</div>
+    </div>
+  </div>
+
+  <div class="workflow">
+    <div class="step">
+      <span class="num">01 / REQUEST</span>
+      <div class="title">Distributor asks for off-contract pricing</div>
+      <div class="desc">Inbound via email or phone to field sales rep.</div>
+    </div>
+    <div class="step friction">
+      <span class="badge">Manual lookup</span>
+      <span class="num">02 / DATA HUNT</span>
+      <div class="title">Rep pulls cost, comp, history across 3+ systems</div>
+      <div class="desc">CRM, pricing sheet, distributor portal. Inconsistent.</div>
+    </div>
+    <div class="step friction">
+      <span class="badge">Email chain</span>
+      <span class="num">03 / SUBMIT</span>
+      <div class="title">Approval request drafted &amp; emailed up</div>
+      <div class="desc">Spreadsheet attachment to pricing manager.</div>
+    </div>
+    <div class="step friction">
+      <span class="badge">2–5 day lag</span>
+      <span class="num">04 / REVIEW</span>
+      <div class="title">Pricing manager reviews, often escalates</div>
+      <div class="desc">Finance pulled in for larger deals. Queue grows.</div>
+    </div>
+    <div class="step friction">
+      <span class="badge">Margin leak</span>
+      <span class="num">05 / DECIDE</span>
+      <div class="title">Decision returned with little context</div>
+      <div class="desc">Approved, denied, or counter-offered. No rationale captured.</div>
+    </div>
+    <div class="step">
+      <span class="num">06 / OUTCOME</span>
+      <div class="title">Order placed — or lost to competitor</div>
+      <div class="desc">No win/loss feedback into pricing model.</div>
+    </div>
+  </div>
+
+  <div class="impact-row">
+    <div class="impact-cell lead">
+      <span class="label">Directional Impact</span>
+      <div class="value">If 3M processes <em>~5,000</em> special-price requests/month at avg $25K deal size — even 15% faster closure unlocks <em>$18M+</em> in annualized at-risk revenue.</div>
+    </div>
+    <div class="impact-cell">
+      <span class="label">Cycle Time</span>
+      <span class="value"><em>2–5</em> days</span>
+    </div>
+    <div class="impact-cell">
+      <span class="label">Margin Leak</span>
+      <span class="value"><em>8–12%</em> avg</span>
+    </div>
+    <div class="impact-cell">
+      <span class="label">Feedback Loop</span>
+      <span class="value"><em>None</em></span>
+    </div>
+  </div>
+
+  <div class="chrome-bottom">
+    <div>3M / Current State</div>
+    <div class="slide-num"><span>Slide</span> 02 / 07</div>
+  </div>
+</section>
+
+<!-- ========== SLIDE 3: 3M AGENT SYSTEM ========== -->
+<section class="slide slide-agents" id="s3">
+  <div class="chrome-top">
+    <div class="brand-mark"><span class="dot"></span> 3M · Coordinated Agent Layer</div>
+    <div>System Design</div>
+  </div>
+
+  <div class="slide-header">
+    <div class="big-num">01.2</div>
+    <div class="header-text">
+      <h2>Three agents. One pricing pipeline.</h2>
+      <div class="sub">Read-only against existing systems <span>→</span> no ERP project required</div>
+    </div>
+  </div>
+
+  <div class="agents-grid">
+    <div class="agent">
+      <span class="agent-num">Agent 01</span>
+      <div class="agent-name">Pricing Intelligence</div>
+      <div class="row"><span class="key">Trigger</span><span class="val">New pricing request lands in CRM or sales inbox.</span></div>
+      <div class="row"><span class="key">Inputs</span><span class="val">Customer purchase history · margin floor rules · competitor pricing · contract terms.</span></div>
+      <div class="row"><span class="key">Reasoning</span><span class="val">Recommend optimal price + win-probability score, bounded by margin guardrails.</span></div>
+      <div class="row"><span class="key">Output</span><span class="val">Pre-filled approval request with rationale and risk flag.</span></div>
+      <div class="row"><span class="key">Integrations</span><span class="val">CRM · pricing engine · ERP (read-only).</span></div>
+      <div class="hitl">
+        <strong>Human-in-loop</strong>
+        Sales rep validates recommendation before submitting — keeps reps in the driver's seat.
+      </div>
+    </div>
+
+    <div class="agent">
+      <span class="agent-num">Agent 02</span>
+      <div class="agent-name">Approval Routing</div>
+      <div class="row"><span class="key">Trigger</span><span class="val">Pricing request is submitted by rep or Agent 01.</span></div>
+      <div class="row"><span class="key">Inputs</span><span class="val">Deal size · margin delta · customer tier · rep track record.</span></div>
+      <div class="row"><span class="key">Reasoning</span><span class="val">Auto-approve within guardrails or escalate to right authority with full context.</span></div>
+      <div class="row"><span class="key">Output</span><span class="val">Instant approval, or one-click escalation to manager / finance.</span></div>
+      <div class="row"><span class="key">Integrations</span><span class="val">Email · Slack · CRM workflow.</span></div>
+      <div class="hitl">
+        <strong>Human-in-loop</strong>
+        Manager approves escalated deals with one-click; small deals route automatically.
+      </div>
+    </div>
+
+    <div class="agent">
+      <span class="agent-num">Agent 03</span>
+      <div class="agent-name">Win / Loss Feedback</div>
+      <div class="row"><span class="key">Trigger</span><span class="val">Deal is closed or marked lost in CRM.</span></div>
+      <div class="row"><span class="key">Inputs</span><span class="val">Final price · competitor named · outcome · customer segment.</span></div>
+      <div class="row"><span class="key">Reasoning</span><span class="val">Update pricing model, surface patterns (e.g., losing on SKU X in Region Y).</span></div>
+      <div class="row"><span class="key">Output</span><span class="val">Weekly insight digest to sales leadership; model retraining payload.</span></div>
+      <div class="row"><span class="key">Integrations</span><span class="val">CRM · BI dashboard · pricing model.</span></div>
+      <div class="hitl">
+        <strong>Human-in-loop</strong>
+        Quarterly pricing committee review; humans set strategy, agent surfaces signal.
+      </div>
+    </div>
+  </div>
+
+  <div class="chrome-bottom">
+    <div>3M / Agent Architecture</div>
+    <div class="slide-num"><span>Slide</span> 03 / 07</div>
+  </div>
+</section>
+
+<!-- ========== SLIDE 4: SYSCO CURRENT STATE ========== -->
+<section class="slide slide-workflow slide-sysco" id="s4">
+  <div class="chrome-top">
+    <div class="brand-mark"><span class="dot"></span> Sysco · Foodservice Distribution</div>
+    <div>Current State Workflow</div>
+  </div>
+
+  <div class="slide-header">
+    <div class="big-num">02</div>
+    <div class="header-text">
+      <h2>The Substitution Crisis</h2>
+      <div class="sub">SKU Out-of-Stock <span>→</span> Order Fulfillment</div>
+    </div>
+  </div>
+
+  <div class="workflow">
+    <div class="step">
+      <span class="num">01 / ORDER</span>
+      <div class="title">Customer order lands in OMS</div>
+      <div class="desc">Restaurant, hospital, or institutional buyer.</div>
+    </div>
+    <div class="step friction">
+      <span class="badge">Late discovery</span>
+      <span class="num">02 / OOS HIT</span>
+      <div class="title">Picker finds SKU is out at warehouse</div>
+      <div class="desc">Discovered hours before truck departs. Too late.</div>
+    </div>
+    <div class="step friction">
+      <span class="badge">Manual call</span>
+      <span class="num">03 / RING UP</span>
+      <div class="title">CSR phones the customer, line by line</div>
+      <div class="desc">Each call ~8 minutes. Doesn't scale at peak.</div>
+    </div>
+    <div class="step friction">
+      <span class="badge">Blind decision</span>
+      <span class="num">04 / SUB OFFER</span>
+      <div class="title">Rep offers a sub with little intelligence</div>
+      <div class="desc">No customer history, compliance fit, or margin lens.</div>
+    </div>
+    <div class="step friction">
+      <span class="badge">Order shrinkage</span>
+      <span class="num">05 / DECIDE</span>
+      <div class="title">Customer accepts, declines, or partial-ships</div>
+      <div class="desc">Often frustrated. Avg ~12% line-item value lost.</div>
+    </div>
+    <div class="step">
+      <span class="num">06 / DELIVER</span>
+      <div class="title">Truck rolls — partial or delayed</div>
+      <div class="desc">Invoice disputes follow. Relationship erodes.</div>
+    </div>
+  </div>
+
+  <div class="impact-row">
+    <div class="impact-cell lead">
+      <span class="label">Directional Impact</span>
+      <div class="value">At <em>~2M</em> order lines/week and a <em>3%</em> OOS rate, Sysco handles <em>60K</em> sub events weekly — <em>~8K</em> rep-hours plus avg <em>12%</em> order shrinkage per event.</div>
+    </div>
+    <div class="impact-cell">
+      <span class="label">Per-call Cost</span>
+      <span class="value"><em>~8</em> min</span>
+    </div>
+    <div class="impact-cell">
+      <span class="label">Order Shrink</span>
+      <span class="value"><em>~12%</em></span>
+    </div>
+    <div class="impact-cell">
+      <span class="label">Resolution</span>
+      <span class="value"><em>Reactive</em></span>
+    </div>
+  </div>
+
+  <div class="chrome-bottom">
+    <div>Sysco / Current State</div>
+    <div class="slide-num"><span>Slide</span> 04 / 07</div>
+  </div>
+</section>
+
+<!-- ========== SLIDE 5: SYSCO AGENT SYSTEM ========== -->
+<section class="slide slide-agents slide-sysco-agents" id="s5">
+  <div class="chrome-top">
+    <div class="brand-mark"><span class="dot"></span> Sysco · Coordinated Agent Layer</div>
+    <div>System Design</div>
+  </div>
+
+  <div class="slide-header">
+    <div class="big-num" style="color:var(--accent-2);">02.2</div>
+    <div class="header-text">
+      <h2>Shift the decision earlier.</h2>
+      <div class="sub">Catch OOS at the order desk, not the loading dock <span style="color:var(--accent-2);">→</span> proactive, not reactive</div>
+    </div>
+  </div>
+
+  <div class="agents-grid">
+    <div class="agent">
+      <span class="agent-num">Agent 01</span>
+      <div class="agent-name">Substitution Intelligence</div>
+      <div class="row"><span class="key">Trigger</span><span class="val">OOS flag fires in WMS at order capture or replenishment cycle.</span></div>
+      <div class="row"><span class="key">Inputs</span><span class="val">Customer purchase history · compliance / dietary rules · contract pricing · margin · live inventory.</span></div>
+      <div class="row"><span class="key">Reasoning</span><span class="val">Rank top 3 subs by price parity, customer pattern, compliance fit, margin.</span></div>
+      <div class="row"><span class="key">Output</span><span class="val">Ranked sub list with rationale, passed to Agent 02.</span></div>
+      <div class="row"><span class="key">Integrations</span><span class="val">WMS · OMS · contract pricing DB.</span></div>
+      <div class="hitl">
+        <strong>Human-in-loop</strong>
+        None at ranking — algorithmic, transparent, auditable.
+      </div>
+    </div>
+
+    <div class="agent">
+      <span class="agent-num">Agent 02</span>
+      <div class="agent-name">Proactive Customer Outreach</div>
+      <div class="row"><span class="key">Trigger</span><span class="val">24–48 hrs before delivery — or instantly for same-day orders.</span></div>
+      <div class="row"><span class="key">Inputs</span><span class="val">Sub rankings · customer contact prefs · order details.</span></div>
+      <div class="row"><span class="key">Reasoning</span><span class="val">Pick best channel (SMS / portal / email), format options + price impact.</span></div>
+      <div class="row"><span class="key">Output</span><span class="val">Self-serve outreach with one-tap selection link.</span></div>
+      <div class="row"><span class="key">Integrations</span><span class="val">Customer portal · SMS / email · CRM.</span></div>
+      <div class="hitl">
+        <strong>Human-in-loop</strong>
+        CSR engaged only on customer escalation or non-response timeout.
+      </div>
+    </div>
+
+    <div class="agent">
+      <span class="agent-num">Agent 03</span>
+      <div class="agent-name">Order Adjustment</div>
+      <div class="row"><span class="key">Trigger</span><span class="val">Customer selects sub — or response timeout reached.</span></div>
+      <div class="row"><span class="key">Inputs</span><span class="val">Customer choice · current inventory · pricing confirmation.</span></div>
+      <div class="row"><span class="key">Reasoning</span><span class="val">Validate stock, lock pricing, regenerate pick list and driver manifest.</span></div>
+      <div class="row"><span class="key">Output</span><span class="val">Auto-update OMS / WMS, push notice to driver app, confirm to customer.</span></div>
+      <div class="row"><span class="key">Integrations</span><span class="val">WMS · OMS · driver mobile app.</span></div>
+      <div class="hitl">
+        <strong>Human-in-loop</strong>
+        Exception-only: compliance flags, high-value account rejections.
+      </div>
+    </div>
+  </div>
+
+  <div class="chrome-bottom">
+    <div>Sysco / Agent Architecture</div>
+    <div class="slide-num"><span>Slide</span> 05 / 07</div>
+  </div>
+</section>
+
+<!-- ========== SLIDE 6: WEDGE STRATEGY ========== -->
+<section class="slide slide-wedge" id="s6">
+  <div class="chrome-top">
+    <div class="brand-mark"><span class="dot"></span> Prioritization &amp; Wedge Strategy</div>
+    <div>Where to Land First</div>
+  </div>
+
+  <div class="slide-header">
+    <div class="big-num">03</div>
+    <div class="header-text">
+      <h2>The wedge is read-only.</h2>
+      <div class="sub">Lowest integration cost <span>→</span> highest measurable lift in &lt; 30 days</div>
+    </div>
+  </div>
+
+  <div class="wedge-grid">
+    <div class="matrix">
+      <table>
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>Revenue</th>
+            <th>Integration</th>
+            <th>Data</th>
+            <th>Adoption</th>
+            <th>Time-to-Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="winner">
+            <td>3M Pricing Intelligence</td>
+            <td><span class="stars">●●●●●</span></td>
+            <td>Low</td>
+            <td>High</td>
+            <td>Low</td>
+            <td>&lt; 30 days</td>
+          </tr>
+          <tr>
+            <td>3M Approval Routing</td>
+            <td><span class="stars">●●●●<span class="stars-d">●</span></span></td>
+            <td>Low</td>
+            <td>High</td>
+            <td>Low</td>
+            <td>30–60 days</td>
+          </tr>
+          <tr>
+            <td>Sysco Sub Intelligence</td>
+            <td><span class="stars">●●●●<span class="stars-d">●</span></span></td>
+            <td>Medium</td>
+            <td>Medium</td>
+            <td>Medium</td>
+            <td>45–60 days</td>
+          </tr>
+          <tr>
+            <td>Sysco Customer Outreach</td>
+            <td><span class="stars">●●●<span class="stars-d">●●</span></span></td>
+            <td>Medium</td>
+            <td>Medium</td>
+            <td>High</td>
+            <td>60–90 days</td>
+          </tr>
+          <tr>
+            <td>3M Win/Loss Feedback</td>
+            <td><span class="stars">●●●<span class="stars-d">●●</span></span></td>
+            <td>Low</td>
+            <td>Medium</td>
+            <td>Low</td>
+            <td>60+ days</td>
+          </tr>
+          <tr>
+            <td>Sysco Order Adjustment</td>
+            <td><span class="stars">●●●<span class="stars-d">●●</span></span></td>
+            <td>High</td>
+            <td>Medium</td>
+            <td>Low</td>
+            <td>75+ days</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="wedge-decision">
+      <span class="label">Deploy First</span>
+      <div class="pick">3M Pricing<br><em>Intelligence Agent.</em></div>
+      <div class="why">Read-only against CRM and email — no ERP write access, no IT project, no procurement cycle. Reps adopt because the agent saves them work, not adds to it. Margin and cycle-time impact appears in week one. Win here, expand laterally.</div>
+
+      <div class="wedge-kpis">
+        <div>
+          <div class="key">KPI moves day 1</div>
+          <div class="val"><em>4 hr</em><br>cycle time</div>
+        </div>
+        <div>
+          <div class="key">Proof point</div>
+          <div class="val"><em>+20%</em><br>margin lift</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chrome-bottom">
+    <div>Wedge / Commercial Strategy</div>
+    <div class="slide-num"><span>Slide</span> 06 / 07</div>
+  </div>
+</section>
+
+<!-- ========== SLIDE 7: 90-DAY PILOT ========== -->
+<section class="slide slide-pilot" id="s7">
+  <div class="chrome-top">
+    <div class="brand-mark"><span class="dot"></span> 90-Day Paid Pilot Plan</div>
+    <div>Scope · Metrics · Risk</div>
+  </div>
+
+  <div class="slide-header">
+    <div class="big-num">04</div>
+    <div class="header-text">
+      <h2>Three phases. One renewal.</h2>
+      <div class="sub">Foundation <span>→</span> Prove It <span>→</span> Expand · success = renewal conversation by day 75</div>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:16px; min-height:0;">
+    <div class="timeline">
+      <div class="phase">
+        <div class="phase-bar"></div>
+        <span class="phase-days">Days 01 — 30</span>
+        <div class="phase-title"><em>Foundation.</em></div>
+        <div class="phase-block">
+          <div class="key">In Scope</div>
+          <ul>
+            <li>3M Pricing Intelligence Agent only</li>
+            <li>1 sales region · 50 pricing requests as test set</li>
+            <li>CRM + email integration · read-only</li>
+          </ul>
+        </div>
+        <div class="phase-block">
+          <div class="key">Data Required</div>
+          <ul>
+            <li>12 mo pricing history</li>
+            <li>Margin floors · customer tiers</li>
+            <li>Win/loss data</li>
+          </ul>
+        </div>
+        <div class="phase-block">
+          <div class="key">Out of Scope</div>
+          <ul>
+            <li class="out">ERP write access</li>
+            <li class="out">National rollout</li>
+            <li class="out">Sysco integration</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-bar"></div>
+        <span class="phase-days">Days 31 — 60</span>
+        <div class="phase-title"><em>Prove it.</em></div>
+        <div class="phase-block">
+          <div class="key">In Scope</div>
+          <ul>
+            <li>Add Approval Routing Agent</li>
+            <li>Expand to 3 regions</li>
+            <li>Begin Sysco data audit in parallel</li>
+          </ul>
+        </div>
+        <div class="phase-block">
+          <div class="key">Leading Metrics</div>
+          <ul>
+            <li>Approval cycle time</li>
+            <li>Recommendation acceptance rate</li>
+            <li>Rep NPS on tool</li>
+          </ul>
+        </div>
+        <div class="phase-block">
+          <div class="key">Lagging Metrics</div>
+          <ul>
+            <li>Margin on approved deals</li>
+            <li>Deals closed vs. prior period</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-bar"></div>
+        <span class="phase-days">Days 61 — 90</span>
+        <div class="phase-title"><em>Expand.</em></div>
+        <div class="phase-block">
+          <div class="key">In Scope</div>
+          <ul>
+            <li>3M national rollout</li>
+            <li>Sysco Sub Intel pilot · 1 DC, 1 segment</li>
+            <li>Renewal &amp; expansion conversation by Day 75</li>
+          </ul>
+        </div>
+        <div class="phase-block">
+          <div class="key">Lagging Metrics</div>
+          <ul>
+            <li>OOS resolution rate</li>
+            <li>Partial delivery rate</li>
+            <li>Order value retention on subs</li>
+          </ul>
+        </div>
+        <div class="phase-block">
+          <div class="key">Phase 2 Tee-Up</div>
+          <ul>
+            <li>3M Win/Loss Feedback Agent</li>
+            <li>Sysco Outreach + Order Adjustment</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk-bar">
+      <div>Risks &amp; Mitigations</div>
+      <div>
+        <div class="risk-name">Data quality</div>
+        <div class="risk-mit">Pricing history may be incomplete → rep validation week 1, exception flagging.</div>
+      </div>
+      <div>
+        <div class="risk-name">Adoption</div>
+        <div class="risk-mit">Reps may bypass the tool → champion-rep program + manager visibility dashboard.</div>
+      </div>
+      <div>
+        <div class="risk-name">Scope creep</div>
+        <div class="risk-mit">Sponsor will ask for more → hold the line. Everything new is "Phase 2."</div>
+      </div>
+      <div>
+        <small>Outcome</small>
+        <em>Renewal<br>conversation<br>by Day 75.</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="chrome-bottom">
+    <div>90-Day Paid Pilot Plan</div>
+    <div class="slide-num"><span>Slide</span> 07 / 07</div>
+  </div>
+</section>
+
+<!-- NAV -->
+<div class="nav" id="nav">
+  <button class="arrow" onclick="go(-1)">‹</button>
+  <button data-i="1" class="active">1</button>
+  <button data-i="2">2</button>
+  <button data-i="3">3</button>
+  <button data-i="4">4</button>
+  <button data-i="5">5</button>
+  <button data-i="6">6</button>
+  <button data-i="7">7</button>
+  <button class="arrow" onclick="go(1)">›</button>
+</div>
+
+<div class="keyhint">
+  <kbd>←</kbd> <kbd>→</kbd> navigate · <kbd>F</kbd> fullscreen
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const navBtns = document.querySelectorAll('.nav button[data-i]');
+  let current = 1;
+
+  function scrollTo(i) {
+    if (i < 1) i = 1;
+    if (i > slides.length) i = slides.length;
+    current = i;
+    document.getElementById('s' + i).scrollIntoView({ behavior: 'smooth' });
+    navBtns.forEach(b => {
+      b.classList.toggle('active', parseInt(b.dataset.i) === i);
+    });
+  }
+
+  function go(delta) { scrollTo(current + delta); }
+
+  navBtns.forEach(b => {
+    b.addEventListener('click', () => scrollTo(parseInt(b.dataset.i)));
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      go(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      go(-1);
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    } else if (e.key === 'Home') {
+      scrollTo(1);
+    } else if (e.key === 'End') {
+      scrollTo(slides.length);
+    } else if (/[1-7]/.test(e.key)) {
+      scrollTo(parseInt(e.key));
+    }
+  });
+
+  // Track which slide is in view
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+        const id = entry.target.id;
+        const i = parseInt(id.replace('s', ''));
+        current = i;
+        navBtns.forEach(b => {
+          b.classList.toggle('active', parseInt(b.dataset.i) === i);
+        });
+      }
+    });
+  }, { threshold: [0.5] });
+
+  slides.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
