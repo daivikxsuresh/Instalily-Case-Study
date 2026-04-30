@@ -12,6 +12,7 @@
     --ink: #0a0a0a;
     --ink-2: #141414;
     --ink-3: #1c1c1c;
+    --ink-4: #232323;
     --paper: #f5f1e8;
     --paper-2: #ddd6c5;
     --rule: #2a2a2a;
@@ -40,7 +41,6 @@
     height: 100vh;
   }
 
-  /* Grain texture overlay */
   body::before {
     content: "";
     position: fixed;
@@ -62,7 +62,6 @@
     overflow: hidden;
   }
 
-  /* Universal slide chrome */
   .chrome-top {
     position: absolute;
     top: 36px;
@@ -111,6 +110,42 @@
   }
   .slide-num span { color: var(--muted); }
 
+  /* SLIDE HEADER */
+  .slide-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 44px;
+    align-items: end;
+    margin-top: 32px;
+  }
+  .big-num {
+    font-family: var(--display);
+    font-size: 88px;
+    font-weight: 300;
+    line-height: 0.85;
+    color: var(--accent);
+    font-style: italic;
+    white-space: nowrap;
+    letter-spacing: -0.02em;
+    padding-right: 4px;
+  }
+  .header-text h2 {
+    font-family: var(--display);
+    font-size: 48px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .header-text .sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+  .header-text .sub span { color: var(--accent); }
+
   /* SLIDE 1 — TITLE */
   .slide-title {
     grid-template-columns: 1fr;
@@ -148,7 +183,6 @@
     font-style: italic;
     font-weight: 300;
     color: var(--accent);
-    font-variation-settings: "opsz" 144, "SOFT" 50;
   }
   .slide-title .deck {
     font-family: var(--display);
@@ -198,60 +232,12 @@
     border: 1px solid var(--rule);
     border-radius: 50%;
   }
-  .deco-line::before {
-    content: "01 / 07";
-    position: absolute;
-    bottom: -6px;
-    right: -20px;
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.2em;
-    background: var(--ink);
-    padding: 4px 10px;
-  }
 
-  /* WORKFLOW SLIDE LAYOUT */
+  /* WORKFLOW SLIDE */
   .slide-workflow {
     grid-template-rows: auto 1fr auto;
-    gap: 24px;
+    gap: 28px;
   }
-  .slide-header {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 44px;
-    align-items: end;
-    margin-top: 32px;
-  }
-  .big-num {
-    font-family: var(--display);
-    font-size: 88px;
-    font-weight: 300;
-    line-height: 0.85;
-    color: var(--accent);
-    font-style: italic;
-    white-space: nowrap;
-    letter-spacing: -0.02em;
-    padding-right: 4px;
-  }
-  .header-text h2 {
-    font-family: var(--display);
-    font-size: 48px;
-    font-weight: 300;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin-bottom: 8px;
-  }
-  .header-text .sub {
-    font-family: var(--mono);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: var(--muted);
-  }
-  .header-text .sub span { color: var(--accent); }
-
-  /* WORKFLOW DIAGRAM */
   .workflow {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -264,12 +250,13 @@
     background: var(--ink-2);
     border: 1px solid var(--rule);
     border-right: none;
-    padding: 24px 22px;
+    padding: 28px 24px;
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    min-height: 200px;
+    gap: 14px;
+    min-height: 180px;
+    justify-content: space-between;
   }
   .step:last-child { border-right: 1px solid var(--rule); }
   .step::after {
@@ -288,52 +275,47 @@
   .step:last-child::after { display: none; }
   .step .num {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 28px;
     color: var(--accent);
-    letter-spacing: 0.2em;
+    font-weight: 300;
+    line-height: 1;
+    opacity: 0.8;
   }
   .step .title {
     font-family: var(--display);
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 400;
     line-height: 1.15;
     letter-spacing: -0.01em;
   }
-  .step .desc {
-    font-size: 12px;
-    color: var(--muted-2);
-    line-height: 1.5;
-    margin-top: auto;
-  }
-  .step.friction { background: linear-gradient(180deg, var(--ink-2), rgba(239, 68, 68, 0.08)); }
+  .step.friction { background: linear-gradient(180deg, var(--ink-2), rgba(239, 68, 68, 0.1)); }
   .step.friction .badge {
-    position: absolute;
-    top: -10px;
-    left: 22px;
+    align-self: flex-start;
     background: var(--danger);
     color: var(--paper);
     font-family: var(--mono);
     font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    padding: 3px 8px;
+    letter-spacing: 0.16em;
+    padding: 4px 8px;
     border-radius: 2px;
     font-weight: 600;
   }
 
-  /* IMPACT BAR */
+  /* IMPACT BAR — bigger numbers, less text */
   .impact-row {
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    grid-template-columns: 1.6fr repeat(3, 1fr);
     gap: 1px;
     background: var(--rule);
     border: 1px solid var(--rule);
   }
   .impact-cell {
     background: var(--ink-2);
-    padding: 22px 28px;
+    padding: 24px 28px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 6px;
   }
   .impact-cell .label {
@@ -345,96 +327,273 @@
   }
   .impact-cell .value {
     font-family: var(--display);
-    font-size: 28px;
+    font-size: 44px;
     font-weight: 300;
     color: var(--paper);
-    line-height: 1.1;
+    line-height: 1;
+    letter-spacing: -0.02em;
   }
   .impact-cell .value em { color: var(--accent); font-style: italic; font-weight: 400; }
+  .impact-cell .unit {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted-2);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
   .impact-cell.lead {
     background: var(--ink-3);
-    justify-content: space-between;
+    justify-content: center;
   }
   .impact-cell.lead .label { color: var(--accent); }
-  .impact-cell.lead .value { font-size: 18px; line-height: 1.4; }
-
-  /* AGENT SLIDE */
-  .slide-agents {
-    grid-template-rows: auto 1fr;
-    gap: 32px;
+  .impact-cell.lead .value {
+    font-size: 22px;
+    line-height: 1.3;
+    font-style: italic;
+    font-weight: 300;
   }
+
+  /* AGENT SLIDE — pipeline diagram + lean cards */
+  .slide-agents {
+    grid-template-rows: auto auto 1fr auto;
+    gap: 24px;
+  }
+  .pipeline {
+    display: grid;
+    grid-template-columns: auto 1fr auto 1fr auto 1fr auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 22px 28px;
+    background: var(--ink-2);
+    border: 1px solid var(--rule);
+    margin-top: 12px;
+  }
+  .pipe-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .pipe-node .pipe-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--rule-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ink-3);
+    font-family: var(--display);
+    font-size: 18px;
+    font-style: italic;
+    color: var(--muted-2);
+  }
+  .pipe-node.active .pipe-circle {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--ink);
+    box-shadow: 0 0 24px rgba(255, 87, 34, 0.4);
+  }
+  .pipe-node.start .pipe-circle, .pipe-node.end .pipe-circle {
+    border-radius: 4px;
+    background: var(--ink);
+    border-color: var(--rule-2);
+    width: 56px;
+    height: 36px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted-2);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-style: normal;
+  }
+  .pipe-node.end .pipe-circle {
+    border-color: var(--success);
+    color: var(--success);
+  }
+  .pipe-node .pipe-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-align: center;
+  }
+  .pipe-node.active .pipe-label { color: var(--accent); }
+  .pipe-arrow {
+    height: 1px;
+    background: var(--rule-2);
+    position: relative;
+    flex: 1;
+    min-width: 30px;
+  }
+  .pipe-arrow::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid var(--rule-2);
+    border-top: 1.5px solid var(--rule-2);
+  }
+
   .agents-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 18px;
     align-items: stretch;
   }
   .agent {
     background: var(--ink-2);
     border: 1px solid var(--rule);
-    border-top: 2px solid var(--accent);
-    padding: 28px 26px;
+    border-top: 3px solid var(--accent);
+    padding: 26px 24px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     position: relative;
   }
   .agent:nth-child(2) { border-top-color: var(--accent-2); }
   .agent:nth-child(3) { border-top-color: var(--info); }
-  .agent .agent-num {
+
+  .agent-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .agent-glyph {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border: 1.5px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-family: var(--display);
+    font-size: 16px;
+    font-style: italic;
+    border-radius: 50%;
+  }
+  .agent:nth-child(2) .agent-glyph { border-color: var(--accent-2); color: var(--accent-2); }
+  .agent:nth-child(3) .agent-glyph { border-color: var(--info); color: var(--info); }
+
+  .agent-meta { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+  .agent-meta .agent-num {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 0.18em;
     color: var(--muted);
     text-transform: uppercase;
   }
-  .agent .agent-name {
+  .agent-meta .agent-name {
     font-family: var(--display);
     font-size: 22px;
     font-weight: 400;
-    line-height: 1.15;
+    line-height: 1.05;
     letter-spacing: -0.01em;
-    margin-bottom: 4px;
   }
-  .agent .row {
-    display: grid;
-    grid-template-columns: 84px 1fr;
-    gap: 14px;
-    padding: 10px 0;
+  .agent-tagline {
+    font-family: var(--display);
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--paper-2);
+    font-style: italic;
+    padding: 12px 0;
     border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
   }
-  .agent .row:first-of-type { border-top: 1px solid var(--rule-2); margin-top: 6px; }
-  .agent .row .key {
+  .agent-flow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .agent-flow > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .agent-flow .key {
     font-family: var(--mono);
     font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 0.14em;
     color: var(--accent);
-    padding-top: 2px;
   }
-  .agent .row .val {
+  .agent:nth-child(2) .agent-flow .key { color: var(--accent-2); }
+  .agent:nth-child(3) .agent-flow .key { color: var(--info); }
+  .agent-flow .val {
     font-size: 12px;
-    line-height: 1.5;
+    line-height: 1.4;
     color: var(--paper);
   }
-  .agent .hitl {
+  .agent-hitl {
     margin-top: auto;
-    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
     background: var(--ink-3);
-    border-left: 2px solid var(--success);
+    border-radius: 3px;
     font-size: 11px;
     color: var(--paper-2);
-    line-height: 1.4;
+    line-height: 1.3;
   }
-  .agent .hitl strong {
-    display: block;
+  .agent-hitl::before {
+    content: "●";
+    color: var(--success);
+    font-size: 10px;
+  }
+  .agent-hitl strong {
     font-family: var(--mono);
     font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 0.14em;
     color: var(--success);
-    margin-bottom: 4px;
+    margin-right: 4px;
     font-weight: 600;
+  }
+
+  .integration-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 24px;
+    background: var(--ink-2);
+    border: 1px solid var(--rule);
+  }
+  .integration-bar .label {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    padding-right: 16px;
+    border-right: 1px solid var(--rule);
+  }
+  .integration-bar .systems {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    flex: 1;
+    font-size: 12px;
+    color: var(--paper-2);
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+  }
+  .integration-bar .systems span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .integration-bar .systems span::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
   }
 
   /* WEDGE SLIDE */
@@ -444,7 +603,7 @@
   }
   .wedge-grid {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
+    grid-template-columns: 1.5fr 1fr;
     gap: 24px;
     align-items: stretch;
   }
@@ -495,7 +654,7 @@
     padding: 32px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
     position: relative;
   }
   .wedge-decision::before {
@@ -515,17 +674,37 @@
   }
   .wedge-decision .pick {
     font-family: var(--display);
-    font-size: 32px;
+    font-size: 36px;
     font-weight: 300;
     line-height: 1.05;
     letter-spacing: -0.02em;
   }
   .wedge-decision .pick em { font-style: italic; color: var(--accent); }
-  .wedge-decision .why {
-    font-size: 13px;
-    line-height: 1.6;
-    color: var(--paper-2);
+
+  .wedge-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
   }
+  .wedge-bullets div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--paper);
+  }
+  .wedge-bullets div::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
   .wedge-kpis {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -535,7 +714,8 @@
   }
   .wedge-kpis > div {
     background: var(--ink-3);
-    padding: 16px 18px;
+    padding: 18px 20px;
+    text-align: center;
   }
   .wedge-kpis .key {
     font-family: var(--mono);
@@ -543,23 +723,78 @@
     text-transform: uppercase;
     letter-spacing: 0.14em;
     color: var(--muted);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   .wedge-kpis .val {
     font-family: var(--display);
-    font-size: 18px;
-    font-weight: 400;
-    color: var(--paper);
-    line-height: 1.2;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-style: italic;
   }
-  .wedge-kpis .val em { color: var(--accent); font-style: italic; }
+  .wedge-kpis .sub {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted-2);
+    margin-top: 6px;
+  }
 
-  /* PILOT SLIDE */
+  /* PILOT SLIDE — visual timeline */
   .slide-pilot {
-    grid-template-rows: auto 1fr;
-    gap: 32px;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 22px;
   }
-  .timeline {
+  .timeline-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    height: 56px;
+    border: 1px solid var(--rule);
+    background: var(--ink-2);
+    position: relative;
+    margin-top: 12px;
+  }
+  .tl-segment {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-right: 1px solid var(--rule);
+    background: linear-gradient(90deg, transparent, var(--accent-soft));
+  }
+  .tl-segment:nth-child(2) {
+    background: linear-gradient(90deg, transparent, rgba(255, 138, 76, 0.15));
+  }
+  .tl-segment:nth-child(3) {
+    background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.15));
+    border-right: none;
+  }
+  .tl-days {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+  .tl-segment:nth-child(1) .tl-days { color: var(--accent); }
+  .tl-segment:nth-child(2) .tl-days { color: var(--accent-2); }
+  .tl-segment:nth-child(3) .tl-days { color: var(--info); }
+  .tl-marker {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 16px rgba(255, 87, 34, 0.6);
+  }
+  .tl-segment:nth-child(2) .tl-marker { background: var(--accent-2); }
+  .tl-segment:nth-child(3) .tl-marker { background: var(--info); box-shadow: 0 0 16px rgba(96, 165, 250, 0.6); }
+
+  .phases {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0;
@@ -569,50 +804,28 @@
     background: var(--ink-2);
     border: 1px solid var(--rule);
     border-right: none;
-    padding: 28px 26px;
+    padding: 26px 26px 24px;
     display: flex;
     flex-direction: column;
     gap: 16px;
     position: relative;
   }
   .phase:last-child { border-right: 1px solid var(--rule); }
-  .phase-bar {
-    position: relative;
-    height: 4px;
-    background: var(--rule);
-    margin-bottom: 6px;
-  }
-  .phase-bar::before {
-    content: "";
-    position: absolute;
-    left: 0; top: 0;
-    height: 100%;
-    width: var(--fill, 33%);
-    background: var(--accent);
-  }
-  .phase:nth-child(2) .phase-bar::before { background: var(--accent-2); width: 66%; }
-  .phase:nth-child(3) .phase-bar::before { background: var(--info); width: 100%; }
-  .phase-days {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-  }
-  .phase:nth-child(2) .phase-days { color: var(--accent-2); }
-  .phase:nth-child(3) .phase-days { color: var(--info); }
   .phase-title {
     font-family: var(--display);
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 400;
-    line-height: 1.05;
+    line-height: 1;
     letter-spacing: -0.01em;
-    margin-bottom: 4px;
   }
   .phase-title em { font-style: italic; color: var(--accent); }
+  .phase:nth-child(2) .phase-title em { color: var(--accent-2); }
+  .phase:nth-child(3) .phase-title em { color: var(--info); }
+
   .phase-block {
-    border-top: 1px solid var(--rule);
-    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
   .phase-block .key {
     font-family: var(--mono);
@@ -620,17 +833,17 @@
     text-transform: uppercase;
     letter-spacing: 0.14em;
     color: var(--muted);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
   .phase-block ul {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
   }
   .phase-block li {
     font-size: 12px;
-    line-height: 1.4;
+    line-height: 1.35;
     color: var(--paper);
     padding-left: 14px;
     position: relative;
@@ -641,6 +854,8 @@
     left: 0;
     color: var(--accent);
   }
+  .phase:nth-child(2) .phase-block li::before { color: var(--accent-2); }
+  .phase:nth-child(3) .phase-block li::before { color: var(--info); }
   .phase-block li.out { color: var(--muted); text-decoration: line-through; }
   .phase-block li.out::before { color: var(--danger); content: "×"; }
 
@@ -650,7 +865,6 @@
     gap: 0;
     background: var(--ink-3);
     border: 1px solid var(--rule);
-    margin-top: 16px;
   }
   .risk-bar > div {
     padding: 16px 20px;
@@ -675,7 +889,7 @@
   }
   .risk-bar .risk-mit {
     font-size: 11px;
-    line-height: 1.4;
+    line-height: 1.35;
     color: var(--muted-2);
   }
   .risk-bar > div:last-child {
@@ -698,7 +912,7 @@
     opacity: 0.7;
   }
 
-  /* NAVIGATION */
+  /* NAV */
   .nav {
     position: fixed;
     bottom: 24px;
@@ -755,18 +969,23 @@
     color: var(--paper-2);
   }
 
-  /* Sysco specific accent variation */
+  /* Sysco accent variations */
   .slide-sysco .big-num { color: var(--accent-2); }
   .slide-sysco .step .num { color: var(--accent-2); }
-  .slide-sysco .step.friction { background: linear-gradient(180deg, var(--ink-2), rgba(239, 68, 68, 0.08)); }
   .slide-sysco .impact-cell .value em { color: var(--accent-2); }
   .slide-sysco .impact-cell.lead .label { color: var(--accent-2); }
   .slide-sysco-agents .agent { border-top-color: var(--accent-2); }
   .slide-sysco-agents .agent:nth-child(2) { border-top-color: var(--accent); }
   .slide-sysco-agents .agent:nth-child(3) { border-top-color: var(--info); }
-  .slide-sysco-agents .agent .row .key { color: var(--accent-2); }
+  .slide-sysco-agents .agent .agent-glyph { border-color: var(--accent-2); color: var(--accent-2); }
+  .slide-sysco-agents .agent:nth-child(2) .agent-glyph { border-color: var(--accent); color: var(--accent); }
+  .slide-sysco-agents .agent:nth-child(3) .agent-glyph { border-color: var(--info); color: var(--info); }
+  .slide-sysco-agents .agent .agent-flow .key { color: var(--accent-2); }
+  .slide-sysco-agents .agent:nth-child(2) .agent-flow .key { color: var(--accent); }
+  .slide-sysco-agents .agent:nth-child(3) .agent-flow .key { color: var(--info); }
+  .slide-sysco-agents .pipe-node.active .pipe-circle { background: var(--accent-2); border-color: var(--accent-2); box-shadow: 0 0 24px rgba(255, 138, 76, 0.4); }
+  .slide-sysco-agents .pipe-node.active .pipe-label { color: var(--accent-2); }
 
-  /* PRINT */
   @media print {
     body { scroll-snap-type: none; height: auto; overflow: visible; }
     .slide { page-break-after: always; height: 100vh; }
@@ -777,10 +996,10 @@
     .slide { padding: 40px 48px 56px; }
     .chrome-top, .chrome-bottom { left: 48px; right: 48px; }
     .workflow { grid-template-columns: repeat(3, 1fr); }
-    .step { border-right: 1px solid var(--rule); border-bottom: none; }
+    .step { border-right: 1px solid var(--rule); }
     .step::after { display: none; }
     .agents-grid { grid-template-columns: 1fr; }
-    .timeline { grid-template-columns: 1fr; }
+    .phases { grid-template-columns: 1fr; }
     .phase { border-right: 1px solid var(--rule); }
   }
 </style>
@@ -797,7 +1016,7 @@
   <div>
     <div class="pill">Analyst &amp; Systems Architecture</div>
     <h1>Turning complex<br>work into <em>revenue.</em></h1>
-    <div class="deck">A coordinated agent architecture for 3M and Sysco — designed to land a paid pilot inside 90 days, without touching the ERP.</div>
+    <div class="deck">A coordinated agent architecture for 3M and Sysco — paid pilot in 90 days, no ERP project.</div>
 
     <div class="meta-row">
       <div>
@@ -806,15 +1025,15 @@
       </div>
       <div>
         <span class="label">For</span>
-        <span class="value">InstaLILY · Founders</span>
+        <span class="value">InstaLILY</span>
       </div>
       <div>
         <span class="label">Companies</span>
         <span class="value">3M · Sysco</span>
       </div>
       <div>
-        <span class="label">Format</span>
-        <span class="value">7 Slides · Executive Read</span>
+        <span class="label">Read time</span>
+        <span class="value">7 minutes</span>
       </div>
     </div>
   </div>
@@ -831,70 +1050,67 @@
 <section class="slide slide-workflow" id="s2">
   <div class="chrome-top">
     <div class="brand-mark"><span class="dot"></span> 3M · Industrial Manufacturer</div>
-    <div>Current State Workflow</div>
+    <div>Current State</div>
   </div>
 
   <div class="slide-header">
     <div class="big-num">01</div>
     <div class="header-text">
-      <h2>The Pricing Bottleneck</h2>
+      <h2>The pricing bottleneck.</h2>
       <div class="sub">Distributor Pricing Approval <span>→</span> Margin Realization</div>
     </div>
   </div>
 
   <div class="workflow">
     <div class="step">
-      <span class="num">01 / REQUEST</span>
-      <div class="title">Distributor asks for off-contract pricing</div>
-      <div class="desc">Inbound via email or phone to field sales rep.</div>
+      <span class="num">01</span>
+      <div class="title">Distributor requests off-contract price</div>
     </div>
     <div class="step friction">
-      <span class="badge">Manual lookup</span>
-      <span class="num">02 / DATA HUNT</span>
-      <div class="title">Rep pulls cost, comp, history across 3+ systems</div>
-      <div class="desc">CRM, pricing sheet, distributor portal. Inconsistent.</div>
+      <span class="badge">Manual</span>
+      <span class="num">02</span>
+      <div class="title">Rep hunts data across 3+ systems</div>
     </div>
     <div class="step friction">
-      <span class="badge">Email chain</span>
-      <span class="num">03 / SUBMIT</span>
-      <div class="title">Approval request drafted &amp; emailed up</div>
-      <div class="desc">Spreadsheet attachment to pricing manager.</div>
+      <span class="badge">Slow</span>
+      <span class="num">03</span>
+      <div class="title">Email approval up the chain</div>
     </div>
     <div class="step friction">
-      <span class="badge">2–5 day lag</span>
-      <span class="num">04 / REVIEW</span>
-      <div class="title">Pricing manager reviews, often escalates</div>
-      <div class="desc">Finance pulled in for larger deals. Queue grows.</div>
+      <span class="badge">2–5 days</span>
+      <span class="num">04</span>
+      <div class="title">Manager reviews · finance escalates</div>
     </div>
     <div class="step friction">
       <span class="badge">Margin leak</span>
-      <span class="num">05 / DECIDE</span>
-      <div class="title">Decision returned with little context</div>
-      <div class="desc">Approved, denied, or counter-offered. No rationale captured.</div>
+      <span class="num">05</span>
+      <div class="title">Decision returned, no rationale</div>
     </div>
     <div class="step">
-      <span class="num">06 / OUTCOME</span>
-      <div class="title">Order placed — or lost to competitor</div>
-      <div class="desc">No win/loss feedback into pricing model.</div>
+      <span class="num">06</span>
+      <div class="title">Order placed — or lost</div>
     </div>
   </div>
 
   <div class="impact-row">
     <div class="impact-cell lead">
-      <span class="label">Directional Impact</span>
-      <div class="value">If 3M processes <em>~5,000</em> special-price requests/month at avg $25K deal size — even 15% faster closure unlocks <em>$18M+</em> in annualized at-risk revenue.</div>
+      <span class="label">At-risk Revenue</span>
+      <div class="value">5,000 requests / mo · 15% faster closure unlocks <em>$18M+</em> annualized.</div>
     </div>
     <div class="impact-cell">
-      <span class="label">Cycle Time</span>
-      <span class="value"><em>2–5</em> days</span>
+      <span class="label">Cycle</span>
+      <span class="value"><em>2–5</em></span>
+      <span class="unit">days</span>
     </div>
     <div class="impact-cell">
       <span class="label">Margin Leak</span>
-      <span class="value"><em>8–12%</em> avg</span>
+      <span class="value"><em>8–12</em></span>
+      <span class="unit">% avg</span>
     </div>
     <div class="impact-cell">
-      <span class="label">Feedback Loop</span>
-      <span class="value"><em>None</em></span>
+      <span class="label">Feedback</span>
+      <span class="value"><em>0</em></span>
+      <span class="unit">closed loops</span>
     </div>
   </div>
 
@@ -914,52 +1130,82 @@
   <div class="slide-header">
     <div class="big-num">01.2</div>
     <div class="header-text">
-      <h2>Three agents. One pricing pipeline.</h2>
+      <h2>Three agents. One pipeline.</h2>
       <div class="sub">Read-only against existing systems <span>→</span> no ERP project required</div>
     </div>
   </div>
 
+  <div class="pipeline">
+    <div class="pipe-node start"><div class="pipe-circle">CRM</div><div class="pipe-label">Trigger</div></div>
+    <div class="pipe-arrow"></div>
+    <div class="pipe-node active"><div class="pipe-circle">α</div><div class="pipe-label">Pricing<br>Intel</div></div>
+    <div class="pipe-arrow"></div>
+    <div class="pipe-node active"><div class="pipe-circle">β</div><div class="pipe-label">Approval<br>Routing</div></div>
+    <div class="pipe-arrow"></div>
+    <div class="pipe-node active"><div class="pipe-circle">γ</div><div class="pipe-label">Win/Loss<br>Loop</div></div>
+    <div class="pipe-arrow"></div>
+    <div class="pipe-node end"><div class="pipe-circle">Margin</div><div class="pipe-label">Outcome</div></div>
+  </div>
+
   <div class="agents-grid">
     <div class="agent">
-      <span class="agent-num">Agent 01</span>
-      <div class="agent-name">Pricing Intelligence</div>
-      <div class="row"><span class="key">Trigger</span><span class="val">New pricing request lands in CRM or sales inbox.</span></div>
-      <div class="row"><span class="key">Inputs</span><span class="val">Customer purchase history · margin floor rules · competitor pricing · contract terms.</span></div>
-      <div class="row"><span class="key">Reasoning</span><span class="val">Recommend optimal price + win-probability score, bounded by margin guardrails.</span></div>
-      <div class="row"><span class="key">Output</span><span class="val">Pre-filled approval request with rationale and risk flag.</span></div>
-      <div class="row"><span class="key">Integrations</span><span class="val">CRM · pricing engine · ERP (read-only).</span></div>
-      <div class="hitl">
-        <strong>Human-in-loop</strong>
-        Sales rep validates recommendation before submitting — keeps reps in the driver's seat.
+      <div class="agent-header">
+        <div class="agent-glyph">α</div>
+        <div class="agent-meta">
+          <span class="agent-num">Agent 01</span>
+          <div class="agent-name">Pricing Intelligence</div>
+        </div>
       </div>
+      <div class="agent-tagline">Recommends optimal price + win-probability score.</div>
+      <div class="agent-flow">
+        <div><span class="key">Trigger</span><span class="val">Request lands in CRM / inbox</span></div>
+        <div><span class="key">Output</span><span class="val">Pre-filled approval w/ rationale</span></div>
+      </div>
+      <div class="agent-hitl"><strong>HITL</strong> Rep validates before submit.</div>
     </div>
 
     <div class="agent">
-      <span class="agent-num">Agent 02</span>
-      <div class="agent-name">Approval Routing</div>
-      <div class="row"><span class="key">Trigger</span><span class="val">Pricing request is submitted by rep or Agent 01.</span></div>
-      <div class="row"><span class="key">Inputs</span><span class="val">Deal size · margin delta · customer tier · rep track record.</span></div>
-      <div class="row"><span class="key">Reasoning</span><span class="val">Auto-approve within guardrails or escalate to right authority with full context.</span></div>
-      <div class="row"><span class="key">Output</span><span class="val">Instant approval, or one-click escalation to manager / finance.</span></div>
-      <div class="row"><span class="key">Integrations</span><span class="val">Email · Slack · CRM workflow.</span></div>
-      <div class="hitl">
-        <strong>Human-in-loop</strong>
-        Manager approves escalated deals with one-click; small deals route automatically.
+      <div class="agent-header">
+        <div class="agent-glyph">β</div>
+        <div class="agent-meta">
+          <span class="agent-num">Agent 02</span>
+          <div class="agent-name">Approval Routing</div>
+        </div>
       </div>
+      <div class="agent-tagline">Auto-approves within guardrails or escalates with full context.</div>
+      <div class="agent-flow">
+        <div><span class="key">Trigger</span><span class="val">Request submitted</span></div>
+        <div><span class="key">Output</span><span class="val">Decision in &lt; 15 min</span></div>
+      </div>
+      <div class="agent-hitl"><strong>HITL</strong> One-click manager approval.</div>
     </div>
 
     <div class="agent">
-      <span class="agent-num">Agent 03</span>
-      <div class="agent-name">Win / Loss Feedback</div>
-      <div class="row"><span class="key">Trigger</span><span class="val">Deal is closed or marked lost in CRM.</span></div>
-      <div class="row"><span class="key">Inputs</span><span class="val">Final price · competitor named · outcome · customer segment.</span></div>
-      <div class="row"><span class="key">Reasoning</span><span class="val">Update pricing model, surface patterns (e.g., losing on SKU X in Region Y).</span></div>
-      <div class="row"><span class="key">Output</span><span class="val">Weekly insight digest to sales leadership; model retraining payload.</span></div>
-      <div class="row"><span class="key">Integrations</span><span class="val">CRM · BI dashboard · pricing model.</span></div>
-      <div class="hitl">
-        <strong>Human-in-loop</strong>
-        Quarterly pricing committee review; humans set strategy, agent surfaces signal.
+      <div class="agent-header">
+        <div class="agent-glyph">γ</div>
+        <div class="agent-meta">
+          <span class="agent-num">Agent 03</span>
+          <div class="agent-name">Win / Loss Feedback</div>
+        </div>
       </div>
+      <div class="agent-tagline">Learns from every closed deal. Surfaces patterns, retrains model.</div>
+      <div class="agent-flow">
+        <div><span class="key">Trigger</span><span class="val">Deal closed or lost</span></div>
+        <div><span class="key">Output</span><span class="val">Weekly leadership digest</span></div>
+      </div>
+      <div class="agent-hitl"><strong>HITL</strong> Quarterly pricing review.</div>
+    </div>
+  </div>
+
+  <div class="integration-bar">
+    <div class="label">Integrations</div>
+    <div class="systems">
+      <span>CRM</span>
+      <span>Email</span>
+      <span>Pricing Engine</span>
+      <span>ERP (read)</span>
+      <span>Slack</span>
+      <span>BI Dashboard</span>
     </div>
   </div>
 
@@ -973,70 +1219,67 @@
 <section class="slide slide-workflow slide-sysco" id="s4">
   <div class="chrome-top">
     <div class="brand-mark"><span class="dot"></span> Sysco · Foodservice Distribution</div>
-    <div>Current State Workflow</div>
+    <div>Current State</div>
   </div>
 
   <div class="slide-header">
     <div class="big-num">02</div>
     <div class="header-text">
-      <h2>The Substitution Crisis</h2>
+      <h2>The substitution crisis.</h2>
       <div class="sub">SKU Out-of-Stock <span>→</span> Order Fulfillment</div>
     </div>
   </div>
 
   <div class="workflow">
     <div class="step">
-      <span class="num">01 / ORDER</span>
+      <span class="num">01</span>
       <div class="title">Customer order lands in OMS</div>
-      <div class="desc">Restaurant, hospital, or institutional buyer.</div>
     </div>
     <div class="step friction">
-      <span class="badge">Late discovery</span>
-      <span class="num">02 / OOS HIT</span>
+      <span class="badge">Late</span>
+      <span class="num">02</span>
       <div class="title">Picker finds SKU is out at warehouse</div>
-      <div class="desc">Discovered hours before truck departs. Too late.</div>
     </div>
     <div class="step friction">
-      <span class="badge">Manual call</span>
-      <span class="num">03 / RING UP</span>
-      <div class="title">CSR phones the customer, line by line</div>
-      <div class="desc">Each call ~8 minutes. Doesn't scale at peak.</div>
+      <span class="badge">8 min/call</span>
+      <span class="num">03</span>
+      <div class="title">CSR phones customer line by line</div>
     </div>
     <div class="step friction">
-      <span class="badge">Blind decision</span>
-      <span class="num">04 / SUB OFFER</span>
-      <div class="title">Rep offers a sub with little intelligence</div>
-      <div class="desc">No customer history, compliance fit, or margin lens.</div>
+      <span class="badge">Blind</span>
+      <span class="num">04</span>
+      <div class="title">Rep offers sub with no intelligence</div>
     </div>
     <div class="step friction">
-      <span class="badge">Order shrinkage</span>
-      <span class="num">05 / DECIDE</span>
-      <div class="title">Customer accepts, declines, or partial-ships</div>
-      <div class="desc">Often frustrated. Avg ~12% line-item value lost.</div>
+      <span class="badge">12% shrink</span>
+      <span class="num">05</span>
+      <div class="title">Customer accepts, declines, or partial</div>
     </div>
     <div class="step">
-      <span class="num">06 / DELIVER</span>
+      <span class="num">06</span>
       <div class="title">Truck rolls — partial or delayed</div>
-      <div class="desc">Invoice disputes follow. Relationship erodes.</div>
     </div>
   </div>
 
   <div class="impact-row">
     <div class="impact-cell lead">
-      <span class="label">Directional Impact</span>
-      <div class="value">At <em>~2M</em> order lines/week and a <em>3%</em> OOS rate, Sysco handles <em>60K</em> sub events weekly — <em>~8K</em> rep-hours plus avg <em>12%</em> order shrinkage per event.</div>
+      <span class="label">Operational Drag</span>
+      <div class="value">2M lines / wk · 3% OOS = <em>60K</em> sub events / wk · <em>~8K</em> rep-hours.</div>
     </div>
     <div class="impact-cell">
-      <span class="label">Per-call Cost</span>
-      <span class="value"><em>~8</em> min</span>
+      <span class="label">Per Call</span>
+      <span class="value"><em>~8</em></span>
+      <span class="unit">minutes</span>
     </div>
     <div class="impact-cell">
       <span class="label">Order Shrink</span>
-      <span class="value"><em>~12%</em></span>
+      <span class="value"><em>~12</em></span>
+      <span class="unit">% avg</span>
     </div>
     <div class="impact-cell">
       <span class="label">Resolution</span>
-      <span class="value"><em>Reactive</em></span>
+      <span class="value" style="font-size:32px;"><em>Reactive</em></span>
+      <span class="unit">no signal</span>
     </div>
   </div>
 
@@ -1057,51 +1300,81 @@
     <div class="big-num" style="color:var(--accent-2);">02.2</div>
     <div class="header-text">
       <h2>Shift the decision earlier.</h2>
-      <div class="sub">Catch OOS at the order desk, not the loading dock <span style="color:var(--accent-2);">→</span> proactive, not reactive</div>
+      <div class="sub">Catch OOS at order capture, not loading dock <span style="color:var(--accent-2);">→</span> proactive, not reactive</div>
     </div>
+  </div>
+
+  <div class="pipeline">
+    <div class="pipe-node start"><div class="pipe-circle">WMS</div><div class="pipe-label">Trigger</div></div>
+    <div class="pipe-arrow"></div>
+    <div class="pipe-node active"><div class="pipe-circle">α</div><div class="pipe-label">Sub<br>Intel</div></div>
+    <div class="pipe-arrow"></div>
+    <div class="pipe-node active"><div class="pipe-circle">β</div><div class="pipe-label">Customer<br>Outreach</div></div>
+    <div class="pipe-arrow"></div>
+    <div class="pipe-node active"><div class="pipe-circle">γ</div><div class="pipe-label">Order<br>Adjust</div></div>
+    <div class="pipe-arrow"></div>
+    <div class="pipe-node end"><div class="pipe-circle">Order Kept</div><div class="pipe-label">Outcome</div></div>
   </div>
 
   <div class="agents-grid">
     <div class="agent">
-      <span class="agent-num">Agent 01</span>
-      <div class="agent-name">Substitution Intelligence</div>
-      <div class="row"><span class="key">Trigger</span><span class="val">OOS flag fires in WMS at order capture or replenishment cycle.</span></div>
-      <div class="row"><span class="key">Inputs</span><span class="val">Customer purchase history · compliance / dietary rules · contract pricing · margin · live inventory.</span></div>
-      <div class="row"><span class="key">Reasoning</span><span class="val">Rank top 3 subs by price parity, customer pattern, compliance fit, margin.</span></div>
-      <div class="row"><span class="key">Output</span><span class="val">Ranked sub list with rationale, passed to Agent 02.</span></div>
-      <div class="row"><span class="key">Integrations</span><span class="val">WMS · OMS · contract pricing DB.</span></div>
-      <div class="hitl">
-        <strong>Human-in-loop</strong>
-        None at ranking — algorithmic, transparent, auditable.
+      <div class="agent-header">
+        <div class="agent-glyph">α</div>
+        <div class="agent-meta">
+          <span class="agent-num">Agent 01</span>
+          <div class="agent-name">Substitution Intelligence</div>
+        </div>
       </div>
+      <div class="agent-tagline">Ranks 3 best subs by price parity, customer history, compliance, margin.</div>
+      <div class="agent-flow">
+        <div><span class="key">Trigger</span><span class="val">OOS flag fires in WMS</span></div>
+        <div><span class="key">Output</span><span class="val">Ranked sub list w/ rationale</span></div>
+      </div>
+      <div class="agent-hitl"><strong>HITL</strong> None — algorithmic, auditable.</div>
     </div>
 
     <div class="agent">
-      <span class="agent-num">Agent 02</span>
-      <div class="agent-name">Proactive Customer Outreach</div>
-      <div class="row"><span class="key">Trigger</span><span class="val">24–48 hrs before delivery — or instantly for same-day orders.</span></div>
-      <div class="row"><span class="key">Inputs</span><span class="val">Sub rankings · customer contact prefs · order details.</span></div>
-      <div class="row"><span class="key">Reasoning</span><span class="val">Pick best channel (SMS / portal / email), format options + price impact.</span></div>
-      <div class="row"><span class="key">Output</span><span class="val">Self-serve outreach with one-tap selection link.</span></div>
-      <div class="row"><span class="key">Integrations</span><span class="val">Customer portal · SMS / email · CRM.</span></div>
-      <div class="hitl">
-        <strong>Human-in-loop</strong>
-        CSR engaged only on customer escalation or non-response timeout.
+      <div class="agent-header">
+        <div class="agent-glyph">β</div>
+        <div class="agent-meta">
+          <span class="agent-num">Agent 02</span>
+          <div class="agent-name">Proactive Outreach</div>
+        </div>
       </div>
+      <div class="agent-tagline">Self-serve sub selection via SMS or portal, 24–48 hrs ahead.</div>
+      <div class="agent-flow">
+        <div><span class="key">Trigger</span><span class="val">Sub list ready</span></div>
+        <div><span class="key">Output</span><span class="val">One-tap customer choice</span></div>
+      </div>
+      <div class="agent-hitl"><strong>HITL</strong> CSR only on escalation.</div>
     </div>
 
     <div class="agent">
-      <span class="agent-num">Agent 03</span>
-      <div class="agent-name">Order Adjustment</div>
-      <div class="row"><span class="key">Trigger</span><span class="val">Customer selects sub — or response timeout reached.</span></div>
-      <div class="row"><span class="key">Inputs</span><span class="val">Customer choice · current inventory · pricing confirmation.</span></div>
-      <div class="row"><span class="key">Reasoning</span><span class="val">Validate stock, lock pricing, regenerate pick list and driver manifest.</span></div>
-      <div class="row"><span class="key">Output</span><span class="val">Auto-update OMS / WMS, push notice to driver app, confirm to customer.</span></div>
-      <div class="row"><span class="key">Integrations</span><span class="val">WMS · OMS · driver mobile app.</span></div>
-      <div class="hitl">
-        <strong>Human-in-loop</strong>
-        Exception-only: compliance flags, high-value account rejections.
+      <div class="agent-header">
+        <div class="agent-glyph">γ</div>
+        <div class="agent-meta">
+          <span class="agent-num">Agent 03</span>
+          <div class="agent-name">Order Adjustment</div>
+        </div>
       </div>
+      <div class="agent-tagline">Auto-updates OMS, WMS, and driver app. Confirms back to customer.</div>
+      <div class="agent-flow">
+        <div><span class="key">Trigger</span><span class="val">Customer selects / timeout</span></div>
+        <div><span class="key">Output</span><span class="val">Updated pick list + manifest</span></div>
+      </div>
+      <div class="agent-hitl"><strong>HITL</strong> Exception-only flags.</div>
+    </div>
+  </div>
+
+  <div class="integration-bar">
+    <div class="label">Integrations</div>
+    <div class="systems">
+      <span>WMS</span>
+      <span>OMS</span>
+      <span>Customer Portal</span>
+      <span>SMS / Email</span>
+      <span>Driver App</span>
+      <span>Contract Pricing DB</span>
     </div>
   </div>
 
@@ -1136,7 +1409,7 @@
             <th>Integration</th>
             <th>Data</th>
             <th>Adoption</th>
-            <th>Time-to-Value</th>
+            <th>TTV</th>
           </tr>
         </thead>
         <tbody>
@@ -1146,7 +1419,7 @@
             <td>Low</td>
             <td>High</td>
             <td>Low</td>
-            <td>&lt; 30 days</td>
+            <td>&lt; 30d</td>
           </tr>
           <tr>
             <td>3M Approval Routing</td>
@@ -1154,39 +1427,39 @@
             <td>Low</td>
             <td>High</td>
             <td>Low</td>
-            <td>30–60 days</td>
+            <td>30–60d</td>
           </tr>
           <tr>
-            <td>Sysco Sub Intelligence</td>
+            <td>Sysco Sub Intel</td>
             <td><span class="stars">●●●●<span class="stars-d">●</span></span></td>
-            <td>Medium</td>
-            <td>Medium</td>
-            <td>Medium</td>
-            <td>45–60 days</td>
+            <td>Med</td>
+            <td>Med</td>
+            <td>Med</td>
+            <td>45–60d</td>
           </tr>
           <tr>
-            <td>Sysco Customer Outreach</td>
+            <td>Sysco Outreach</td>
             <td><span class="stars">●●●<span class="stars-d">●●</span></span></td>
-            <td>Medium</td>
-            <td>Medium</td>
+            <td>Med</td>
+            <td>Med</td>
             <td>High</td>
-            <td>60–90 days</td>
+            <td>60–90d</td>
           </tr>
           <tr>
-            <td>3M Win/Loss Feedback</td>
+            <td>3M Win/Loss</td>
             <td><span class="stars">●●●<span class="stars-d">●●</span></span></td>
             <td>Low</td>
-            <td>Medium</td>
+            <td>Med</td>
             <td>Low</td>
-            <td>60+ days</td>
+            <td>60d+</td>
           </tr>
           <tr>
-            <td>Sysco Order Adjustment</td>
+            <td>Sysco Order Adjust</td>
             <td><span class="stars">●●●<span class="stars-d">●●</span></span></td>
             <td>High</td>
-            <td>Medium</td>
+            <td>Med</td>
             <td>Low</td>
-            <td>75+ days</td>
+            <td>75d+</td>
           </tr>
         </tbody>
       </table>
@@ -1195,16 +1468,23 @@
     <div class="wedge-decision">
       <span class="label">Deploy First</span>
       <div class="pick">3M Pricing<br><em>Intelligence Agent.</em></div>
-      <div class="why">Read-only against CRM and email — no ERP write access, no IT project, no procurement cycle. Reps adopt because the agent saves them work, not adds to it. Margin and cycle-time impact appears in week one. Win here, expand laterally.</div>
+
+      <div class="wedge-bullets">
+        <div>Read-only · no ERP project</div>
+        <div>Reps adopt — saves them work</div>
+        <div>Margin lift visible in week 1</div>
+      </div>
 
       <div class="wedge-kpis">
         <div>
-          <div class="key">KPI moves day 1</div>
-          <div class="val"><em>4 hr</em><br>cycle time</div>
+          <div class="key">Cycle Time</div>
+          <div class="val">4 hr</div>
+          <div class="sub">from 2–5 days</div>
         </div>
         <div>
-          <div class="key">Proof point</div>
-          <div class="val"><em>+20%</em><br>margin lift</div>
+          <div class="key">Margin Lift</div>
+          <div class="val">+20%</div>
+          <div class="sub">on approved deals</div>
         </div>
       </div>
     </div>
@@ -1219,7 +1499,7 @@
 <!-- ========== SLIDE 7: 90-DAY PILOT ========== -->
 <section class="slide slide-pilot" id="s7">
   <div class="chrome-top">
-    <div class="brand-mark"><span class="dot"></span> 90-Day Paid Pilot Plan</div>
+    <div class="brand-mark"><span class="dot"></span> 90-Day Paid Pilot</div>
     <div>Scope · Metrics · Risk</div>
   </div>
 
@@ -1227,119 +1507,103 @@
     <div class="big-num">04</div>
     <div class="header-text">
       <h2>Three phases. One renewal.</h2>
-      <div class="sub">Foundation <span>→</span> Prove It <span>→</span> Expand · success = renewal conversation by day 75</div>
+      <div class="sub">Foundation <span>→</span> Prove It <span>→</span> Expand · success = renewal by day 75</div>
     </div>
   </div>
 
-  <div style="display:flex; flex-direction:column; gap:16px; min-height:0;">
-    <div class="timeline">
-      <div class="phase">
-        <div class="phase-bar"></div>
-        <span class="phase-days">Days 01 — 30</span>
-        <div class="phase-title"><em>Foundation.</em></div>
-        <div class="phase-block">
-          <div class="key">In Scope</div>
-          <ul>
-            <li>3M Pricing Intelligence Agent only</li>
-            <li>1 sales region · 50 pricing requests as test set</li>
-            <li>CRM + email integration · read-only</li>
-          </ul>
-        </div>
-        <div class="phase-block">
-          <div class="key">Data Required</div>
-          <ul>
-            <li>12 mo pricing history</li>
-            <li>Margin floors · customer tiers</li>
-            <li>Win/loss data</li>
-          </ul>
-        </div>
-        <div class="phase-block">
-          <div class="key">Out of Scope</div>
-          <ul>
-            <li class="out">ERP write access</li>
-            <li class="out">National rollout</li>
-            <li class="out">Sysco integration</li>
-          </ul>
-        </div>
-      </div>
+  <div class="timeline-bar">
+    <div class="tl-segment">
+      <span class="tl-days">Days 01–30</span>
+      <div class="tl-marker"></div>
+    </div>
+    <div class="tl-segment">
+      <span class="tl-days">Days 31–60</span>
+      <div class="tl-marker"></div>
+    </div>
+    <div class="tl-segment">
+      <span class="tl-days">Days 61–90</span>
+      <div class="tl-marker"></div>
+    </div>
+  </div>
 
-      <div class="phase">
-        <div class="phase-bar"></div>
-        <span class="phase-days">Days 31 — 60</span>
-        <div class="phase-title"><em>Prove it.</em></div>
-        <div class="phase-block">
-          <div class="key">In Scope</div>
-          <ul>
-            <li>Add Approval Routing Agent</li>
-            <li>Expand to 3 regions</li>
-            <li>Begin Sysco data audit in parallel</li>
-          </ul>
-        </div>
-        <div class="phase-block">
-          <div class="key">Leading Metrics</div>
-          <ul>
-            <li>Approval cycle time</li>
-            <li>Recommendation acceptance rate</li>
-            <li>Rep NPS on tool</li>
-          </ul>
-        </div>
-        <div class="phase-block">
-          <div class="key">Lagging Metrics</div>
-          <ul>
-            <li>Margin on approved deals</li>
-            <li>Deals closed vs. prior period</li>
-          </ul>
-        </div>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-title"><em>Foundation.</em></div>
+      <div class="phase-block">
+        <div class="key">In Scope</div>
+        <ul>
+          <li>3M Pricing Intel Agent only</li>
+          <li>1 region · 50 test requests</li>
+          <li>CRM + email · read-only</li>
+        </ul>
       </div>
-
-      <div class="phase">
-        <div class="phase-bar"></div>
-        <span class="phase-days">Days 61 — 90</span>
-        <div class="phase-title"><em>Expand.</em></div>
-        <div class="phase-block">
-          <div class="key">In Scope</div>
-          <ul>
-            <li>3M national rollout</li>
-            <li>Sysco Sub Intel pilot · 1 DC, 1 segment</li>
-            <li>Renewal &amp; expansion conversation by Day 75</li>
-          </ul>
-        </div>
-        <div class="phase-block">
-          <div class="key">Lagging Metrics</div>
-          <ul>
-            <li>OOS resolution rate</li>
-            <li>Partial delivery rate</li>
-            <li>Order value retention on subs</li>
-          </ul>
-        </div>
-        <div class="phase-block">
-          <div class="key">Phase 2 Tee-Up</div>
-          <ul>
-            <li>3M Win/Loss Feedback Agent</li>
-            <li>Sysco Outreach + Order Adjustment</li>
-          </ul>
-        </div>
+      <div class="phase-block">
+        <div class="key">Not in Scope</div>
+        <ul>
+          <li class="out">ERP write</li>
+          <li class="out">National rollout</li>
+          <li class="out">Sysco</li>
+        </ul>
       </div>
     </div>
 
-    <div class="risk-bar">
-      <div>Risks &amp; Mitigations</div>
-      <div>
-        <div class="risk-name">Data quality</div>
-        <div class="risk-mit">Pricing history may be incomplete → rep validation week 1, exception flagging.</div>
+    <div class="phase">
+      <div class="phase-title"><em>Prove it.</em></div>
+      <div class="phase-block">
+        <div class="key">In Scope</div>
+        <ul>
+          <li>Add Approval Routing Agent</li>
+          <li>Expand to 3 regions</li>
+          <li>Sysco data audit begins</li>
+        </ul>
       </div>
-      <div>
-        <div class="risk-name">Adoption</div>
-        <div class="risk-mit">Reps may bypass the tool → champion-rep program + manager visibility dashboard.</div>
+      <div class="phase-block">
+        <div class="key">Metrics</div>
+        <ul>
+          <li>Cycle time · acceptance rate</li>
+          <li>Rep NPS</li>
+          <li>Margin on approved deals</li>
+        </ul>
       </div>
-      <div>
-        <div class="risk-name">Scope creep</div>
-        <div class="risk-mit">Sponsor will ask for more → hold the line. Everything new is "Phase 2."</div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-title"><em>Expand.</em></div>
+      <div class="phase-block">
+        <div class="key">In Scope</div>
+        <ul>
+          <li>3M national rollout</li>
+          <li>Sysco Sub Intel · 1 DC</li>
+          <li>Renewal convo · day 75</li>
+        </ul>
       </div>
-      <div>
-        <small>Outcome</small>
-        <em>Renewal<br>conversation<br>by Day 75.</em>
+      <div class="phase-block">
+        <div class="key">Phase 2 Tee-Up</div>
+        <ul>
+          <li>3M Win/Loss agent</li>
+          <li>Sysco Outreach + Adjust</li>
+        </ul>
       </div>
+    </div>
+  </div>
+
+  <div class="risk-bar">
+    <div>Risks</div>
+    <div>
+      <div class="risk-name">Data quality</div>
+      <div class="risk-mit">Rep validation in week 1.</div>
+    </div>
+    <div>
+      <div class="risk-name">Adoption</div>
+      <div class="risk-mit">Champion-rep + manager dashboard.</div>
+    </div>
+    <div>
+      <div class="risk-name">Scope creep</div>
+      <div class="risk-mit">Hold the line. New = Phase 2.</div>
+    </div>
+    <div>
+      <small>Outcome</small>
+      <em>Renewal<br>by Day 75.</em>
     </div>
   </div>
 
@@ -1349,7 +1613,6 @@
   </div>
 </section>
 
-<!-- NAV -->
 <div class="nav" id="nav">
   <button class="arrow" onclick="go(-1)">‹</button>
   <button data-i="1" class="active">1</button>
@@ -1406,7 +1669,6 @@
     }
   });
 
-  // Track which slide is in view
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
