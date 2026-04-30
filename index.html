@@ -9,24 +9,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Onest:wght@300..900&family=JetBrains+Mono:wght@300..700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #0a0a0a;
-    --ink-2: #141414;
-    --ink-3: #1c1c1c;
-    --ink-4: #232323;
-    --paper: #f5f1e8;
-    --paper-2: #ddd6c5;
-    --rule: #2a2a2a;
-    --rule-2: #3a3a3a;
-    --muted: #7a7670;
-    --muted-2: #a09a90;
-    --accent: #ff5722;
-    --accent-2: #ff8a4c;
-    --accent-soft: rgba(255, 87, 34, 0.12);
-    --danger: #ef4444;
-    --danger-soft: rgba(239, 68, 68, 0.1);
-    --success: #84cc16;
-    --info: #60a5fa;
-    --warn: #f59e0b;
+    /* Light editorial theme — warm cream paper, deep ink */
+    --ink: #fbf7ed;          /* main bg */
+    --ink-2: #ffffff;        /* primary card surface */
+    --ink-3: #f3ecdb;        /* deeper surface / inset */
+    --ink-4: #e9e1cc;        /* darkest surface */
+    --paper: #1a1410;        /* main text - deep warm ink */
+    --paper-2: #4a4239;      /* secondary text */
+    --rule: #ddd4be;         /* warm light rule */
+    --rule-2: #c5bca3;       /* darker rule */
+    --muted: #7a7164;        /* muted text */
+    --muted-2: #a8a08a;      /* tertiary muted */
+    --accent: #d63f08;       /* deeper rust orange — pops on cream */
+    --accent-2: #ea580c;     /* lighter accent */
+    --accent-soft: rgba(214, 63, 8, 0.1);
+    --danger: #b91c1c;
+    --danger-soft: rgba(185, 28, 28, 0.08);
+    --success: #4d7c0f;
+    --info: #1d4ed8;
+    --warn: #b45309;
+    --on-accent: #fbf7ed;    /* text color when bg is accent */
+    --shadow-card: 0 1px 3px rgba(26, 20, 16, 0.06), 0 1px 2px rgba(26, 20, 16, 0.04);
 
     --display: 'Fraunces', Georgia, serif;
     --body: 'Onest', -apple-system, sans-serif;
@@ -47,7 +50,8 @@
     inset: 0;
     pointer-events: none;
     z-index: 100;
-    opacity: 0.04;
+    opacity: 0.06;
+    mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E");
   }
 
@@ -102,7 +106,7 @@
   .brand-mark .dot {
     width: 8px; height: 8px; border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 12px var(--accent);
+    box-shadow: 0 0 0 3px rgba(214, 63, 8, 0.15);
   }
   .slide-num {
     color: var(--paper);
@@ -150,7 +154,7 @@
   .slide-title {
     grid-template-columns: 1fr;
     align-content: center;
-    background: radial-gradient(ellipse at 80% 30%, rgba(255, 87, 34, 0.08), transparent 60%);
+    background: radial-gradient(ellipse at 80% 30%, rgba(214, 63, 8, 0.12), transparent 65%);
   }
   .slide-title .pill {
     display: inline-flex;
@@ -257,6 +261,7 @@
     gap: 16px;
     min-height: 220px;
     justify-content: space-between;
+    box-shadow: var(--shadow-card);
   }
   .step:last-child { border-right: 1px solid var(--rule); }
   .step::after {
@@ -289,11 +294,11 @@
     line-height: 1.2;
     letter-spacing: -0.01em;
   }
-  .step.friction { background: linear-gradient(180deg, var(--ink-2), rgba(239, 68, 68, 0.1)); }
+  .step.friction { background: linear-gradient(180deg, var(--ink-2) 30%, rgba(185, 28, 28, 0.08)); }
   .step.friction .badge {
     align-self: flex-start;
     background: var(--danger);
-    color: var(--paper);
+    color: #fff;
     font-family: var(--mono);
     font-size: 10px;
     text-transform: uppercase;
@@ -368,6 +373,7 @@
     background: var(--ink-2);
     border: 1px solid var(--rule);
     margin-top: 12px;
+    box-shadow: var(--shadow-card);
   }
   .pipe-node {
     display: flex;
@@ -392,25 +398,27 @@
   .pipe-node.active .pipe-circle {
     border-color: var(--accent);
     background: var(--accent);
-    color: var(--ink);
-    box-shadow: 0 0 24px rgba(255, 87, 34, 0.4);
+    color: var(--on-accent);
+    box-shadow: 0 0 0 4px rgba(214, 63, 8, 0.12);
   }
   .pipe-node.start .pipe-circle, .pipe-node.end .pipe-circle {
     border-radius: 4px;
-    background: var(--ink);
+    background: var(--ink-3);
     border-color: var(--rule-2);
     width: 56px;
     height: 36px;
     font-family: var(--mono);
     font-size: 9px;
-    color: var(--muted-2);
+    color: var(--paper-2);
     letter-spacing: 0.14em;
     text-transform: uppercase;
     font-style: normal;
+    font-weight: 600;
   }
   .pipe-node.end .pipe-circle {
     border-color: var(--success);
     color: var(--success);
+    background: rgba(77, 124, 15, 0.08);
   }
   .pipe-node .pipe-label {
     font-family: var(--mono);
@@ -455,6 +463,7 @@
     flex-direction: column;
     gap: 18px;
     position: relative;
+    box-shadow: var(--shadow-card);
   }
   .agent:nth-child(2) { border-top-color: var(--accent-2); }
   .agent:nth-child(3) { border-top-color: var(--info); }
@@ -564,6 +573,7 @@
     padding: 14px 24px;
     background: var(--ink-2);
     border: 1px solid var(--rule);
+    box-shadow: var(--shadow-card);
   }
   .integration-bar .label {
     font-family: var(--mono);
@@ -612,6 +622,7 @@
     background: var(--ink-2);
     border: 1px solid var(--rule);
     overflow: hidden;
+    box-shadow: var(--shadow-card);
   }
   .matrix table {
     width: 100%;
@@ -657,6 +668,7 @@
     flex-direction: column;
     gap: 24px;
     position: relative;
+    box-shadow: var(--shadow-card);
   }
   .wedge-decision::before {
     content: "";
@@ -759,6 +771,7 @@
     background: var(--ink-2);
     position: relative;
     margin-top: 12px;
+    box-shadow: var(--shadow-card);
   }
   .tl-segment {
     position: relative;
@@ -770,10 +783,10 @@
     background: linear-gradient(90deg, transparent, var(--accent-soft));
   }
   .tl-segment:nth-child(2) {
-    background: linear-gradient(90deg, transparent, rgba(255, 138, 76, 0.15));
+    background: linear-gradient(90deg, transparent, rgba(234, 88, 12, 0.12));
   }
   .tl-segment:nth-child(3) {
-    background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.15));
+    background: linear-gradient(90deg, transparent, rgba(29, 78, 216, 0.1));
     border-right: none;
   }
   .tl-days {
@@ -787,14 +800,14 @@
   .tl-segment:nth-child(2) .tl-days { color: var(--accent-2); }
   .tl-segment:nth-child(3) .tl-days { color: var(--info); }
   .tl-marker {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 16px rgba(255, 87, 34, 0.6);
+    box-shadow: 0 0 0 4px rgba(214, 63, 8, 0.18);
   }
-  .tl-segment:nth-child(2) .tl-marker { background: var(--accent-2); }
-  .tl-segment:nth-child(3) .tl-marker { background: var(--info); box-shadow: 0 0 16px rgba(96, 165, 250, 0.6); }
+  .tl-segment:nth-child(2) .tl-marker { background: var(--accent-2); box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.18); }
+  .tl-segment:nth-child(3) .tl-marker { background: var(--info); box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.18); }
 
   .phases {
     display: grid;
@@ -811,6 +824,7 @@
     flex-direction: column;
     gap: 28px;
     position: relative;
+    box-shadow: var(--shadow-card);
   }
   .phase:last-child { border-right: 1px solid var(--rule); }
   .phase-title {
@@ -874,7 +888,7 @@
     padding: 22px 26px;
     border-right: 1px solid var(--rule);
   }
-  .risk-bar > div:last-child { border-right: none; background: var(--accent); color: var(--ink); }
+  .risk-bar > div:last-child { border-right: none; background: var(--accent); color: var(--on-accent); }
   .risk-bar > div:first-child {
     display: flex;
     align-items: center;
@@ -926,10 +940,11 @@
     gap: 6px;
     z-index: 50;
     padding: 8px 12px;
-    background: rgba(20, 20, 20, 0.85);
+    background: rgba(255, 255, 255, 0.85);
     border: 1px solid var(--rule);
     backdrop-filter: blur(12px);
     border-radius: 24px;
+    box-shadow: 0 8px 24px rgba(26, 20, 16, 0.08);
   }
   .nav button {
     background: transparent;
@@ -948,7 +963,7 @@
     font-weight: 600;
   }
   .nav button:hover { color: var(--paper); }
-  .nav button.active { background: var(--accent); color: var(--ink); }
+  .nav button.active { background: var(--accent); color: var(--on-accent); }
   .nav .arrow { color: var(--muted); padding: 0 4px; }
   .nav .arrow:hover { color: var(--accent); }
 
